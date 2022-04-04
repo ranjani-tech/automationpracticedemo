@@ -68,7 +68,11 @@ public class DriverProvider {
         }
 
         driver.manage().window().maximize();
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(15L,1L));
+        //Dont mix implicitly wait when Explicity is being used
+        //driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(15L,1L));
+        driver.manage().timeouts().scriptTimeout(Duration.ofSeconds(5L,1L));
+        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(5L,1L));
+
         ((JavascriptExecutor) driver).executeScript("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})");
 
         return driver;

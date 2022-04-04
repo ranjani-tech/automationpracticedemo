@@ -215,7 +215,7 @@ public class GlobalMyStorePage extends BasePage {
             productInCart.put("productname", productName);
             productInCart.put("amount", totalCount);
             productInCart.put("quantity", quantity);
-            System.out.println(productInCart);
+            //System.out.println(productInCart);
 
             actualProductCarts.add(productInCart);
 

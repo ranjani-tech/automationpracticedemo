@@ -99,8 +99,10 @@ public class StepDefinitions {
         System.out.println("expectedProductlist "+ expectedProductlist);
         System.out.println("actualProductList "+ actualProductList);
 
+        //simple assert to verify with hashset
         assertTrue(new HashSet<Map<String, String>>(actualProductList).equals(new HashSet<Map<String, String>>(expectedProductlist)));
 
+        //iterate and verify if any unmatched product found
         /*
             Additional validation
             actualProductList as List<Map{k:v}> --> iterator every list and match for every key to every  <-- expectedProductList as List<Map{k:v}>
@@ -112,7 +114,7 @@ public class StepDefinitions {
                                         (expectedProductValue.getKey().equals(actualProductSearchValue.getKey()) &&
                                                 expectedProductValue.getValue().equals(actualProductSearchValue.getValue()))))
                 )).collect(Collectors.toList());
-        System.out.println(unMatchedRecords.size());
+        //System.out.println(unMatchedRecords.size());
         for(Map<String,String> unMatchedRecord: unMatchedRecords){
             System.out.println(unMatchedRecord);
         }

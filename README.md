@@ -58,15 +58,23 @@ How to run:
 Option A:
 
 Open the project in IntelliJ Idea
+
 Right click on project > Maven > Sync project
+
 Open file automationpractice.feature
+
 Click on "Run test" green play button on the left of the scenario
+
 Incase error modify the build configuration glue = "com/globaltechchallenge/automationpracticedemo/web"
+
 Option B:
 
 Ensure that you have maven cli installed (brew install maven)
+
 Go to root of project directory
+
 Run mvn clean Install test
+
 This project is tested on Chrome browsers only
 
 screenshot Screenshot taken during the after each steps.

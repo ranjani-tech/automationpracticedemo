@@ -85,7 +85,6 @@ public class StepDefinitions {
 
     @And("user verify the products")
     public void user_verify_the_products(io.cucumber.datatable.DataTable productInCarts) {
-        // Write code here that turns the phrase above into concrete actions
         // For automatic transformation, change DataTable to one of
         // E, List<E>, List<List<E>>, List<Map<K,V>>, Map<K,V> or
         // Map<K, List<V>>. E,K,V must be a String, Integer, Float,

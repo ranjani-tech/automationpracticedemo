@@ -16,3 +16,11 @@ Feature: User should be able add product to cart
       | DRESSES     | Summer Dresses  | M    | Orange | Printed Summer Dress        | 1         | Add to Cart | Continue Shopping |
     And user clicks Link Title "View my shopping cart"
     Then user should be able to view the item in cart "SHOPPING-CART SUMMARY" page
+    And user verify the products
+      | productname                 | amount | quantity |
+      | Printed Dress               | $50.99 | 1 |
+      | Faded Short Sleeve T-shirts | $16.51 | 1 |
+      | Printed Summer Dress        | $28.98 | 1 |
+    And user verify summary product is "3 Products"
+    And user verify the total amount is "$98.48"
+    When user "Add" the "Faded Short Sleeve T-shirts" in the cart

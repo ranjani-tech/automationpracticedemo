@@ -65,5 +65,17 @@ public class StepDefinitions {
         }
     }
 
+
+    @When("user clicks Link Title {string}")
+    public void user_clicks_link_title(String linkToClickFromTitle) {
+        myStoreProductPage.userClicksLinkTitle(linkToClickFromTitle);
+
+    }
+    @Then("user should be able to view the item in cart {string} page")
+    public void user_should_be_able_to_view_the_item_in_cart_page(String cartTitle) {
+        myStoreProductPage.viewCart(cartTitle);
+
+    }
+
 }
 

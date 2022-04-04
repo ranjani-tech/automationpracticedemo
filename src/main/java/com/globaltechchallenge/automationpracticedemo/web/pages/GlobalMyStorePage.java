@@ -53,6 +53,14 @@ public class GlobalMyStorePage extends BasePage {
     @FindBy(how = How.CSS, css = "span[title='Continue shopping']")
     WebElement continueShoppingElement;
 
+    //titleXpath
+    String aTitleXpathPrefix = "//a[@title='";
+    WebElement aTitleElement;
+
+    //cartTitle
+    @FindBy(how = How.ID, using = "cart_title")
+    WebElement cartTitleElement;
+
     //Constructor
     public GlobalMyStorePage(WebDriver driver) {
         super(driver);
@@ -136,5 +144,21 @@ public class GlobalMyStorePage extends BasePage {
         waitUntilElementClickable(continueShoppingElement);
         clickOn(continueShoppingElement);
 
+    }
+
+    //Navigate to Order Page
+    public void userClicksLinkTitle(String linkToClickFromTitle) {
+
+        aTitleElement = getElementByXpathPrefixAndSuffix(aTitleXpathPrefix , linkToClickFromTitle , xPathSuffix);
+        checkIFElementIsNotNull(aTitleElement);
+        clickOn(aTitleElement);
+        waitUntilUrlContains("order");
+
+    }
+
+    //Navigate to Cart
+    public void viewCart(String cartTitle) {
+        waitUntilElementVisible(cartTitleElement);
+        checkIfTextContainsExpected(cartTitleElement, cartTitle);
     }
 }

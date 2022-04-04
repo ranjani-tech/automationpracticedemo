@@ -14,3 +14,5 @@ Feature: User should be able add product to cart
       | TOPS        | T-shirts        | M    | Blue   | Faded Short Sleeve T-shirts | 1         | Add to Cart | Continue Shopping |
       | DRESSES     | Evening Dresses | S    | Beige  | Printed Dress               | 1         | Add to Cart | Continue Shopping |
       | DRESSES     | Summer Dresses  | M    | Orange | Printed Summer Dress        | 1         | Add to Cart | Continue Shopping |
+    And user clicks Link Title "View my shopping cart"
+    Then user should be able to view the item in cart "SHOPPING-CART SUMMARY" page

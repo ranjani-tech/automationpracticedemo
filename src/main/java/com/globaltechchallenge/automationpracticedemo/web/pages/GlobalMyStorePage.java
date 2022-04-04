@@ -7,8 +7,12 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.PageFactory;
+import org.testng.Assert;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class GlobalMyStorePage extends BasePage {
 
@@ -60,6 +64,30 @@ public class GlobalMyStorePage extends BasePage {
     //cartTitle
     @FindBy(how = How.ID, using = "cart_title")
     WebElement cartTitleElement;
+
+    //xpath for product Table in Cart
+    String everyTableRowsXpath = "//div[@id='order-detail-content']//table[@id='cart_summary']//tbody//tr";
+    String productColumnXpath = "./td[2]";
+    String quantityColumnXpath = "./td[@class='cart_quantity text-center']//input[@type='hidden']";
+    String totalAmountColumnXpath = "./td[6]";
+
+    //summary products text
+    String summaryProductsQuantityXpath = "//*[@id='summary_products_quantity']";
+
+    @FindBy(how = How.ID, using = "summary_products_quantity")
+    WebElement summaryProductQuantityElement;
+
+    //total price amount text
+    @FindBy(how = How.ID, using = "total_price")
+    WebElement totalPriceElement;
+
+
+
+    //actionInCartElement
+    String actionInCartXpathPrefix = "//p[@class='product-name']//a[text()='";
+    String actionInCartXpathMiddleFirst = "']//../..//..//a[@title='";
+    String actionInCartXpathMiddleSecond = "']//..//i[@class='";
+    WebElement actionInCartElement;
 
     //Constructor
     public GlobalMyStorePage(WebDriver driver) {
@@ -160,5 +188,73 @@ public class GlobalMyStorePage extends BasePage {
     public void viewCart(String cartTitle) {
         waitUntilElementVisible(cartTitleElement);
         checkIfTextContainsExpected(cartTitleElement, cartTitle);
+    }
+
+    //verifyEvery Product - get all product from basket and return to assert
+    public List<Map<String, String>> verifyProductList() {
+
+        waitUntilUrlContains("order");
+        List<Map<String, String>> actualProductCarts = new ArrayList<Map<String, String>>();
+
+        List<WebElement> tableRows = find_elements_by_xpath(everyTableRowsXpath);
+        waitUntilElementsVisible(tableRows);
+        for (WebElement eachRow : tableRows) {
+
+            List<WebElement> productColumns = find_elements_by_xpath(eachRow, productColumnXpath);
+            List<WebElement> quantityColumns = find_elements_by_xpath(eachRow, quantityColumnXpath);
+            List<WebElement> totalColumns = find_elements_by_xpath(eachRow, totalAmountColumnXpath);
+
+            //First HeaderOnly from td for product description
+            String[] listCarts = productColumns.get(0).getText().split("\\n");
+
+            String productName = listCarts[0];
+            String quantity = quantityColumns.get(0).getAttribute("value");
+            String totalCount = totalColumns.get(0).getText();
+
+            Map<String, String> productInCart = new HashMap<String, String>();
+            productInCart.put("productname", productName);
+            productInCart.put("amount", totalCount);
+            productInCart.put("quantity", quantity);
+            System.out.println(productInCart);
+
+            actualProductCarts.add(productInCart);
+
+        }
+
+        return actualProductCarts;
+    }
+
+    //verify the change in the summary product text
+    public void verifySummaryProduct(String summaryProduct) {
+        checkIfTextIsExpected(summaryProductQuantityElement, summaryProduct);
+        Assert.assertEquals(summaryProductQuantityElement.getText(), summaryProduct);
+    }
+
+    //verify the amount
+    public void verifyAmount(String amountValue) {
+        waitUntilElementVisible(totalPriceElement);
+        checkIfTextIsExpected(totalPriceElement, amountValue);
+    }
+
+
+
+    //action an product in cart - add or delete
+    public void actionTheProductInCart(String productName, String actionName, String iconName) {
+        actionInCartElement = getElementByXpathPrefixMiddleSuffix(actionInCartXpathPrefix, productName, actionInCartXpathMiddleFirst, actionName, actionInCartXpathMiddleSecond, iconName, xPathSuffix);
+        waitUntilElementClickable(actionInCartElement);
+        moveElement(actionInCartElement);
+        summaryProductQuantityElement = find_element_by_xpath(summaryProductsQuantityXpath);
+        String summaryProductQuantityValue = summaryProductQuantityElement.getText();
+
+        clickOn(actionInCartElement);
+        waitUntilTextInElementInvisible(summaryProductsQuantityXpath, summaryProductQuantityValue);
+
+
+        waitUntilUrlContains("order");
+    }
+
+    //delete the item in cart
+    public void verifyTheProductInCartDeleted(String productName, String actionName, String iconName) {
+        waitUntilElementDeletedByXpath(actionInCartXpathPrefix, productName, actionInCartXpathMiddleFirst, actionName, actionInCartXpathMiddleSecond, iconName, xPathSuffix);
     }
 }

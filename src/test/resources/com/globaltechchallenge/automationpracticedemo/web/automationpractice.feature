@@ -24,3 +24,19 @@ Feature: User should be able add product to cart
     And user verify summary product is "3 Products"
     And user verify the total amount is "$98.48"
     When user "Add" the "Faded Short Sleeve T-shirts" in the cart
+    Then user verify the products
+      | productname                 | amount | quantity |
+      | Printed Dress               | $50.99 | 1 |
+      | Faded Short Sleeve T-shirts | $33.02 | 2 |
+      | Printed Summer Dress        | $28.98 | 1 |
+    And user verify summary product is "4 Products"
+    And user verify the total amount is "$114.99"
+    When user "Remove" the "Printed Dress" in the cart
+    Then user verify the products
+      | productname                 | amount | quantity |
+      | Faded Short Sleeve T-shirts | $33.02 | 2 |
+      | Printed Summer Dress        | $28.98 | 1 |
+    And user verify summary product is "3 Products"
+    And user verify the total amount is "$64.00"
+
+

@@ -2,6 +2,7 @@ package com.globaltechchallenge.automationpracticedemo.web.base;
 
 import io.qameta.allure.Step;
 import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -139,6 +140,27 @@ public class BaseAction {
         System.out.println(message);
     }
 
+    @Step
+    protected void waitUntilElementsVisible(List<WebElement> elements) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+        wait.until(ExpectedConditions.visibilityOfAllElements(elements));
+        String message = "wait until all elements are visible";
+        System.out.println(message);
+    }
+
+    //find_elements_by_xpath Method:
+    protected List<WebElement> find_elements_by_xpath(WebElement inElement, String xPath) {
+        List<WebElement> elements = null;
+        try {
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+            //wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy((By) inElement.findElements(By.xpath(xPath))));
+            elements = inElement.findElements(By.xpath(xPath));
+        } catch (Exception e) {
+            System.out.println("Exception on xPath element" + xPath);
+            System.out.println(e.getMessage());
+        }
+        return elements;
+    }
 
     //find_elements_by_xpath Method:
     protected List<WebElement> find_elements_by_xpath(String xPath) {
@@ -173,6 +195,40 @@ public class BaseAction {
         String xPath = xpathPrefix + elementName + xpathSuffix;
         WebElement element = find_element_by_xpath(xPath);
         return element;
+    }
+
+    protected WebElement getElementByXpathPrefixMiddleSuffix(String xpathPrefix,String productName,String xPathMiddleFirst,String actionName,String xPathMiddleSecond,String iconName,String xpathSuffix) {
+        String xPath = xpathPrefix + productName + xPathMiddleFirst + actionName + xPathMiddleSecond + iconName + xpathSuffix;
+        WebElement element = find_element_by_xpath(xPath);
+        return element;
+    }
+
+    protected void waitUntilElementDeletedByXpath(String xpathPrefix,String productName,String xPathMiddleFirst,String actionName,String xPathMiddleSecond,String iconName,String xpathSuffix) {
+        String xPath = xpathPrefix + productName + xPathMiddleFirst + actionName + xPathMiddleSecond + iconName + xpathSuffix;
+        waitUntilElementInvisible(xPath);
+    }
+
+
+    @Step
+    protected void waitUntilTextInElementInvisible(String xPath, String textValue) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+        wait.until(ExpectedConditions.invisibilityOfElementWithText(By.xpath(xPath),textValue));
+        String message = "wait until " + xPath + " textValue " + textValue + " is visible";
+        System.out.println(message);
+    }
+
+    @Step
+    protected void waitUntilElementInvisible(String elementXpath) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath(elementXpath)));
+        String message = "wait until " + elementXpath + " is invisible";
+        System.out.println(message);
+    }
+
+
+    protected void moveElement(WebElement element){
+        Actions actions = new Actions(driver);
+        actions.moveToElement(element).perform();
     }
 
 
